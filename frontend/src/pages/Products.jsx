@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "../services/product";
-import { useSelector } from "react-redux";
+import { useState } from "react";
+
+const categories = ["all", "shirts", "jeans"];
 
 function Products() {
-  const { data: products, isLoading } = useGetProductsQuery();
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const { data: products = [], isLoading } = useGetProductsQuery();
+
+  const filteredProducts =
+    selectedCategory === "all"
+      ? products
+      : products.filter((product) => product.category === selectedCategory);
 
   return (
     <div className="h-screen p-5 max-w-7xl mx-auto">
@@ -11,11 +19,28 @@ function Products() {
         <p>Loading...</p>
       ) : (
         <div>
+          {/* Tabs */}
+          <div className="flex my-8 items-center justify-center gap-5">
+            {categories.map((category) => (
+              <button
+                className={`uppercase ${selectedCategory === category ? "bg-gray-800 text-gray-50" : ""}  tracking-wide hover:bg-gray-900 transition-all duration-200 hover:text-gray-50 bg-gray-50 border text-sm cursor-pointer px-4 font-semibold rounded-lg py-1 border-gray-800`}
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
+          {/* <div>
+            {products &&
+              products.map((product) => <div>{product.category}</div>)}
+          </div> */}
           {/* <h1 className="font-bold text-2xl text-gray-800">Products</h1> */}
           <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {" "}
             {products &&
-              products.map((product) => (
+              filteredProducts.map((product) => (
                 <Link
                   to={`/product/${product._id}`}
                   className="flex flex-col items-center justify-center"
