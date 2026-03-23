@@ -1,15 +1,24 @@
 import User from "../models/auth.schema.js";
 
 async function completeProfileHandler(req, res) {
-  console.log(req.body);
+  try {
+    const userId = req.user._id;
 
-  let user = new User({
-    username: req.body.username,
-    phoneNumber: req.body.phoneNumber,
-    email: req.body.email,
-  });
-  const data = await user.save();
-  console.log(data);
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        username: req.body.username,
+        email: req.body.email,
+        isProfileCompleted: true,
+      },
+      { new: true },
+    );
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
 }
 
 export default completeProfileHandler;

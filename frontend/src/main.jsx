@@ -1,23 +1,44 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.jsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
+import { Toaster } from "react-hot-toast";
 import { store } from "./store.js";
-import CompleteProfileModal from "./components/CompleteProfileModal.jsx";
+import CompleteProfileModal from "./pages/CompleteProfileModal.jsx";
 import OtpModal from "./components/OtpModal.jsx";
 import Products from "./pages/Products.jsx";
+import ProductDetails from "./pages/ProductDetails.jsx";
+import AuthModal from "./components/AuthModal.jsx";
+import Layout from "./Layout.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import Profile from "./pages/Profile.jsx";
+import ProductTable from "./pages/admin/ProductTable.jsx";
+import Checkout from "./pages/Checkout.jsx";
+import ProfileProtection from "./components/ProfileProtection.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
+      <Toaster position="top-right" reverseOrder={false} />
+
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/otp" element={<OtpModal />} />
-          <Route path="/complete-profile" element={<CompleteProfileModal />} />
-          <Route path="/products" element={<Products />} />
+          <Route element={<Layout />}>
+            <Route index path="/" element={<Products />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/pro" element={<ProductTable />} />
+            <Route path="/checkout" element={<Checkout />} />
+            {/* <Route element={<ProfileProtection />}> */}
+            <Route
+              path="/complete-profile"
+              element={<CompleteProfileModal />}
+            />
+            {/* </Route> */}
+          </Route>
+          {/* Admin routes */}
+          <Route element={<ProtectedRoute />}></Route>
         </Routes>
       </BrowserRouter>
     </Provider>

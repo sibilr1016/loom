@@ -11,5 +11,10 @@ export default async function sendOtpHandler(req, res) {
       channel: "sms",
       to: formattedPhone,
     });
-  if (verification.status == "pending") console.log("Waiting for OTP");
+  if (verification.status === "pending") {
+    console.log("Waiting for OTP");
+    return res.status(200).json({
+      message: "OTP sent",
+    });
+  }
 }

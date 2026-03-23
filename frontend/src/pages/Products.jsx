@@ -1,20 +1,23 @@
+import { Link } from "react-router-dom";
 import { useGetProductsQuery } from "../services/product";
+import { useSelector } from "react-redux";
 
 function Products() {
   const { data: products, isLoading } = useGetProductsQuery();
 
   return (
-    <div className="h-screen p-5">
+    <div className="h-screen p-5 max-w-7xl mx-auto">
       {isLoading ? (
         <p>Loading...</p>
       ) : (
         <div>
-          <h1 className="font-bold text-2xl text-gray-800">Products</h1>
-          <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {/* <h1 className="font-bold text-2xl text-gray-800">Products</h1> */}
+          <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {" "}
             {products &&
               products.map((product) => (
-                <div
+                <Link
+                  to={`/product/${product._id}`}
                   className="flex flex-col items-center justify-center"
                   key={product._id}
                 >
@@ -30,7 +33,7 @@ function Products() {
                   </h1>
 
                   <p className="self-start pl-1">{`RS. ${product.price} `}</p>
-                </div>
+                </Link>
               ))}
           </div>
         </div>

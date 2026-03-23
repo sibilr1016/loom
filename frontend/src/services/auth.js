@@ -1,10 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const phoneApi = createApi({
-  reducerPath: "phoneApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/auth" }),
+export const authApi = createApi({
+  reducerPath: "authApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:3000/api/auth",
+    credentials: "include",
+  }),
   endpoints: (builder) => ({
-    sendPhone: builder.mutation({
+    sendPhoneNumber: builder.mutation({
       query: (data) => ({
         url: "/send-otp",
         method: "POST",
@@ -25,11 +28,23 @@ export const phoneApi = createApi({
         body: data,
       }),
     }),
+    getMe: builder.query({
+      query: () => "/me",
+    }),
+    saveAddress: builder.mutation({
+      query: (data) => ({
+        url: "/save-address",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
 export const {
   useCompleteProfileMutation,
-  useSendPhoneMutation,
+  useSendPhoneNumberMutation,
   useSendOtpMutation,
-} = phoneApi;
+  useGetMeQuery,
+  useSaveAddressMutation,
+} = authApi;

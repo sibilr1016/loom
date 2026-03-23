@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAddProductMutation } from "../services/product";
 
-function AddProduct() {
+function AddProduct({ onClose }) {
   const [thumbnail, setThumbnail] = useState(null);
   const [gallery, setGallery] = useState([]);
   const [productName, setProductName] = useState("");
@@ -61,120 +61,163 @@ function AddProduct() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col space-y-4 text-sm text-gray-600 p-5 bg-white rounded-lg shadow-2xl"
-    >
-      <h1 className=" text-center font-bold text-2xl text-gray-800">
-        Add Product
-      </h1>
-
-      <div className="flex gap-10">
-        <div>
-          {preview && <img src={preview} alt="Preview" className="h-20 w-20" />}
-
-          <input
-            className="border p-2 rounded-lg"
-            type="file"
-            accept="image/*"
-            onChange={handleThumbnailChange}
-          />
-        </div>
-        <div className="space-y-2">
-          <div className="flex gap-3">
-            {previews &&
-              previews.map((preview) => (
-                <img src={preview} alt="Preview" className="h-20 w-20" />
-              ))}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="bg-white border border-gray-300 rounded-md w-[600px]">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-4 p-6 text-xs tracking-wide"
+        >
+          <div className="flex justify-between items-center border-b border-gray-300 pb-2">
+            <h1 className="font-semibold text-gray-800">Add Product</h1>
+            <button
+              type="button"
+              onClick={() => onClose()}
+              className="text-gray-700 hover:text-black cursor-pointer"
+            >
+              ✕
+            </button>
           </div>
-          <input
-            onChange={handleGalleryChange}
-            accept="image/*"
-            className="border p-2 rounded-lg"
-            type="file"
-            multiple
-          />
-        </div>
-      </div>
-      <input
-        type="text"
-        className="border p-2 placeholder:text-gray-600"
-        name="productName"
-        value={productName}
-        placeholder="Product Name"
-        onChange={(e) => setProductName(e.target.value)}
-      />
-      <select
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        name="category"
-        id=""
-        className="border p-2"
-      >
-        <option value="shirts">shirts</option>
-        <option value="jeans">Jeans</option>
-      </select>
-      <input
-        className="border p-2"
-        type="number"
-        value={price}
-        name="price"
-        onChange={(e) => setPrice(e.target.value)}
-      />
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className="border placeholder:p-2 placeholder:text-gray-600"
-        placeholder="Description"
-      ></textarea>
 
-      <div className="border p-2 ">
-        <div>
-          <ul className="flex gap-2 mb-3">
-            {sizes.map((size) => (
-              <li
-                key={size}
-                className="border cursor-pointer text-center h-7 w-7"
-                onClick={(e) => setProductSize(e.target.outerText)}
-              >
-                {size}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="flex gap-2">
+          <div className="flex gap-6 items-center">
+            <div className="flex flex-col gap-2">
+              {preview && (
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="h-16 w-16 object-cover border rounded"
+                />
+              )}
+
+              <input
+                className="border border-gray-300 px-2 py-1 rounded-md"
+                type="file"
+                accept="image/*"
+                onChange={handleThumbnailChange}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2 ">
+              <div className="flex gap-2">
+                {previews &&
+                  previews.map((preview, i) => (
+                    <img
+                      key={i}
+                      src={preview}
+                      alt="Preview"
+                      className="h-16 w-16 object-cover border rounded"
+                    />
+                  ))}
+              </div>
+              <input
+                onChange={handleGalleryChange}
+                accept="image/*"
+                className="border border-gray-300 px-2 py-1 rounded-md"
+                type="file"
+                multiple
+              />
+            </div>
+          </div>
+
+          <input
+            type="text"
+            className="border border-gray-300 px-3 py-2 rounded-md"
+            name="productName"
+            value={productName}
+            placeholder="Product Name"
+            onChange={(e) => setProductName(e.target.value)}
+          />
+
+          <div className="flex gap-4">
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              name="category"
+              className="border border-gray-300 px-3 py-2 rounded-md"
+            >
+              <option value="shirts">Shirts</option>
+              <option value="jeans">Jeans</option>
+            </select>
+
+            <input
+              className="border border-gray-300 px-3 py-2 rounded-md"
+              type="number"
+              placeholder="Price"
+              value={price}
+              name="price"
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </div>
+
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="border border-gray-300 px-3 py-2 rounded-md"
+            placeholder="Description"
+          />
+
+          <div className="border border-gray-300 rounded-md p-3 flex  gap-10">
+            <div>
+              <ul className="flex gap-2 mb-3">
+                {sizes.map((size) => (
+                  <li
+                    key={size}
+                    className="border border-gray-400 w-7 h-7 flex items-center justify-center cursor-pointer rounded"
+                    onClick={(e) => setProductSize(e.target.outerText)}
+                  >
+                    {size}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setProductCount((c) => c - 1)}
+                  className="border border-gray-400 px-2 rounded"
+                >
+                  -
+                </button>
+
+                <p>{productCount}</p>
+
+                <button
+                  type="button"
+                  onClick={() => setProductCount((c) => c + 1)}
+                  className="border border-gray-400 px-2 rounded"
+                >
+                  +
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleVariant}
+                  className="border border-gray-400 px-3 py-1 rounded"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              {variants.map((variant, index) => (
+                <p
+                  key={index}
+                  className="text-gray-700 border p-1 border-gray-400 rounded-md"
+                >
+                  {variant.size} - {variant.count}
+                </p>
+              ))}
+            </div>
+          </div>
+
           <button
-            type="button"
-            onClick={() => setProductCount((c) => c - 1)}
-            className="px-2 border"
+            className="bg-gray-900 text-gray-50 px-4 py-2 rounded-md font-semibold"
+            type="submit"
           >
-            -
+            Add Product
           </button>
-          <p>{productCount}</p>
-          <button
-            type="button"
-            onClick={() => setProductCount((c) => c + 1)}
-            className="px-2 border"
-          >
-            +
-          </button>
-          <button type="button" onClick={handleVariant} className="px-2 border">
-            Add
-          </button>
-        </div>
+        </form>
       </div>
-      {variants.map((variant, index) => (
-        <p key={index}>
-          {variant.size} - {variant.count}
-        </p>
-      ))}
-      <button
-        className="border p-2 bg-gray-900 rounded-lg text-gray-200"
-        type="submit"
-      >
-        Add
-      </button>
-    </form>
+    </div>
   );
 }
 
