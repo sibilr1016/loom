@@ -1,11 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useGetProductsQuery } from "../services/product";
 import { useState } from "react";
 
 const categories = ["all", "shirts", "jeans"];
 
 function Products() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [params] = useSearchParams();
+  const categoryFromURL = params.get("category");
+  const [selectedCategory, setSelectedCategory] = useState(
+    categoryFromURL || "all",
+  );
   const { data: products = [], isLoading } = useGetProductsQuery();
 
   const filteredProducts =
@@ -42,7 +46,7 @@ function Products() {
             {products &&
               filteredProducts.map((product) => (
                 <Link
-                  to={`/product/${product._id}`}
+                  to={`/product/${product.category}/${product._id}`}
                   className="flex flex-col items-center justify-center"
                   key={product._id}
                 >
@@ -53,11 +57,11 @@ function Products() {
                       alt={product.productName}
                     />
                   </div>
-                  <h1 className="font-semibold self-start pl-1 text-lg text-gray-900">
+                  <h1 className="font-semibold md:self-start pl-1 text-lg text-gray-900">
                     {product.productName}
                   </h1>
 
-                  <p className="self-start pl-1">{`RS. ${product.price} `}</p>
+                  <p className="md:self-start pl-1">{`RS. ${product.price} `}</p>
                 </Link>
               ))}
           </div>
