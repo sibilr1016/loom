@@ -16,6 +16,7 @@ import Profile from "./pages/Profile.jsx";
 import ProductTable from "./pages/admin/ProductTable.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import ProfileProtection from "./components/ProfileProtection.jsx";
+import AdminLogin from "./pages/admin/adminLogin.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -24,6 +25,7 @@ createRoot(document.getElementById("root")).render(
 
       <BrowserRouter>
         <Routes>
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route element={<Layout />}>
             <Route index path="/" element={<Products />} />
             <Route path="/product/:category/:id" element={<ProductDetails />} />
@@ -37,6 +39,7 @@ createRoot(document.getElementById("root")).render(
             />
             {/* </Route> */}
           </Route>
+
           {/* Admin routes */}
           <Route element={<ProtectedRoute />}></Route>
         </Routes>

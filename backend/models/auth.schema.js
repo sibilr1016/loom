@@ -9,6 +9,15 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    password: {
+      type: String,
+      select: false,
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
     addresses: [
       {
         firstName: String,

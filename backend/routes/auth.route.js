@@ -4,6 +4,7 @@ import verifyOtpHandler from "../controllers/verifyOtpHandler.js";
 import completeProfileHandler from "../controllers/completeProfileHandler.js";
 import { protect } from "../middleware/protect.js";
 import saveAddressHandler from "../controllers/saveAddressHandler.js";
+import logoutUser from "../utils/logoutUser.js";
 
 const router = express.Router();
 
@@ -15,5 +16,7 @@ router.post("/save-address", protect, saveAddressHandler);
 router.get("/me", protect, (req, res) => {
   res.json(req.user);
 });
+
+router.post("/logout", logoutUser);
 
 export default router;
